@@ -1,14 +1,17 @@
-﻿using System.Data.Common;
-namespace sda_onsite_2_csharp_library_management.src.Entity;
+﻿namespace sda_onsite_2_csharp_library_management.src.Entity;
 
 using sda_onsite_2_csharp_library_management.src.constant;
 using sda_onsite_2_csharp_library_management.src.Manager;
+using sda_onsite_2_csharp_library_management.src.service;
 
 internal class Program
 {
     private static void Main()
     {
-        var library = new Library();
+
+        var emailService = new EmailNotificationService();
+        var smsService = new SMSNotificationService();
+        var library = new Library(emailService, smsService);
 
         var user1 = new User("Alice", new DateTime(2023, 1, 1));
         var user2 = new User("Bob", new DateTime(2023, 2, 1));
@@ -42,42 +45,52 @@ internal class Program
         var book19 = new Book("The Iliad");
         var book20 = new Book("Anna Karenina");
 
-        library.AddUser(user1);
-        library.AddUser(user2);
-        library.AddUser(user3);
-        library.AddUser(user3);
-        library.AddUser(user4);
-        library.AddUser(user5);
-        library.AddUser(user6);
-        library.AddUser(user7);
         library.AddUser(user8);
-        library.AddUser(user9);
-        library.AddUser(user10);
+        Console.WriteLine();
+        library.AddUser(user8);
+        Console.WriteLine();
+        library.AddUser(user2);
+        Console.WriteLine();
+        library.AddUser(user3);
+        // Console.WriteLine();
+        // library.AddUser(user4);
+        // library.AddUser(user9);
+        // library.AddUser(user5);
+        // library.AddUser(user6);
+        // library.AddUser(user7);
+        // library.AddUser(user1);
+        // library.AddUser(user8);
+        //library.AddUser(user10);
+        // library.AddUser(user3);
 
         Console.WriteLine("------------------------------");
 
         library.AddBook(book2);
+        Console.WriteLine();
+        library.AddBook(book2);
+        Console.WriteLine();
         library.AddBook(book14);
+        Console.WriteLine();
         library.AddBook(book3);
-        library.AddBook(book4);
-        library.AddBook(book1);
-        library.AddBook(book5);
-        library.AddBook(book6);
-        library.AddBook(book7);
-        library.AddBook(book8);
-        library.AddBook(book10);
-        library.AddBook(book9);
-        library.AddBook(book12);
-        library.AddBook(book13);
-        library.AddBook(book20);
-        library.AddBook(book15);
-        library.AddBook(book16);
-        library.AddBook(book11);
-        library.AddBook(book17);
-        library.AddBook(book18);
-        library.AddBook(book19);
+        // library.AddBook(book4);
+        // library.AddBook(book1);
+        // library.AddBook(book5);
+        // library.AddBook(book6);
+        // library.AddBook(book7);
+        // library.AddBook(book8);
+        // library.AddBook(book10);
+        // library.AddBook(book9);
+        // library.AddBook(book12);
+        // library.AddBook(book13);
+        // library.AddBook(book20);
+        // library.AddBook(book15);
+        // library.AddBook(book16);
+        // library.AddBook(book11);
+        // library.AddBook(book17);
+        // library.AddBook(book18);
+        // library.AddBook(book19);
 
-        Console.WriteLine("------------------------------");
+        // Console.WriteLine("------------------------------");
 
         Book? findingBook = library.FindBooksByTitle(book1.Title);
         if (findingBook != null)

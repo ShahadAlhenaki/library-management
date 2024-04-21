@@ -1,5 +1,6 @@
 using sda_onsite_2_csharp_library_management.src.constant;
 using sda_onsite_2_csharp_library_management.src.Entity;
+using sda_onsite_2_csharp_library_management.src.service;
 
 namespace sda_onsite_2_csharp_library_management.src.Manager
 {
@@ -7,8 +8,14 @@ namespace sda_onsite_2_csharp_library_management.src.Manager
     {
         private IEnumerable<User> _users = [];
         private IEnumerable<Book> _books = [];
+        private EmailNotificationService _emailNotificationService;
+        private SMSNotificationService _sMSNotificationService;
 
-        public Library() { }
+        public Library(EmailNotificationService emailNotificationService, SMSNotificationService sMSNotificationService)
+        {
+            _emailNotificationService = emailNotificationService;
+            _sMSNotificationService = sMSNotificationService;
+        }
 
         public Book? FindBooksByTitle(string title)
         {
@@ -19,31 +26,39 @@ namespace sda_onsite_2_csharp_library_management.src.Manager
             return _users.FirstOrDefault(u => u.Name == name);
         }
 
-        public void AddUser(User user)
+        public IEnumerable<User> AddUser(User user)
         {
             var userFound = _users.FirstOrDefault(u => u.Name.Equals(user.Name));
             if (userFound != null)
             {
-                Console.WriteLine("The user is already exists");
+                // Console.WriteLine("The user is already exists");
+                _emailNotificationService.SendNotificationOnFailure(user.Name);
+                return _users;
             }
             else
             {
                 _users = _users.Append(user);
-                Console.WriteLine($"User has been added ({user.Name})");
+                _emailNotificationService.SendNotificationOnSucess(user.Name);
+                return _users;
+                //Console.WriteLine($"User has been added ({user.Name})");
             }
         }
 
-        public void AddBook(Book book)
+        public IEnumerable<Book> AddBook(Book book)
         {
             var bookFound = _books.FirstOrDefault(b => b.Title.Equals(book.Title));
             if (bookFound != null)
             {
-                Console.WriteLine("The book is already exists");
+                //Console.WriteLine("The book is already exists");
+                _emailNotificationService.SendNotificationOnFailure(book.Title);
+                return _books;
             }
             else
             {
                 _books = _books.Append(book);
-                Console.WriteLine($"Book has been added  ({book.Title})");
+                _emailNotificationService.SendNotificationOnSucess(book.Title);
+                // Console.WriteLine($"Book has been added  ({book.Title})");
+                return _books;
             }
         }
 
